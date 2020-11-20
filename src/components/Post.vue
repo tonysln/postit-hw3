@@ -1,10 +1,28 @@
 <template>
-  <div></div>
+  <div>
+      <div v-for="(post, index) in posts" :key="index">
+          {{ post }}
+      </div>
+      <div v-for="(author, index) in authors" :key="index">
+          {{ author }}
+      </div>
+  </div>
 </template>
 
 <script>
 export default {
-name: "Post"
+    name: "Post",
+    computed: {
+        posts: function () {
+            return this.$store.state.posts
+        },
+        authors: function () {
+            return this.$store.state.authors
+        }
+    },
+    mounted() {
+        this.$store.dispatch("getPosts");
+    }
 }
 </script>
 
@@ -78,7 +96,9 @@ name: "Post"
 }
 
 .like-button {
-  background-image: url(../images/like.png);
+  /*background-image: url(../images/like.png);
+
+   */
   background-size: 15px;
   background-repeat: no-repeat;
   background-position: 5px center;

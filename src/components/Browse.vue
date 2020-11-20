@@ -2,17 +2,20 @@
   <div>
     <Header/>
     <section class="main-container" id="profiles-container">
+        <profile/>
     </section>
   </div>
 </template>
 
 <script>
 import Header from "./Header.vue";
+import Profile from "./Profile.vue"
 
 export default {
   name: "Browse",
   components: {
-    Header
+    Header,
+      Profile
   }
 }
 </script>

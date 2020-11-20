@@ -15,7 +15,7 @@
         <input type="text" name="search"><button type="button">Search</button>
       </div>
       <div class="avatar-container">
-        <img src="" class="avatar" alt="Me" id="user-avatar" @click=toggleMenu>
+        <img src="../assets/avatar.png" class="avatar" alt="Me" id="user-avatar" @click=toggleMenu>
       </div>
     </nav>
   </header>

@@ -1,10 +1,22 @@
 <template>
-  <div></div>
+  <div>
+      <div v-for="(profile, index) in profiles" :key="index">
+          {{ profile }}
+      </div>
+  </div>
 </template>
 
 <script>
 export default {
-name: "Profile"
+    name: "Profile",
+    computed: {
+        profiles: function () {
+            return this.$store.state.profiles
+        }
+    },
+    mounted() {
+        this.$store.dispatch("getProfiles");
+    }
 }
 </script>
 
