@@ -1,8 +1,8 @@
 <template>
   <header>
     <div id="drop-down-menu" v-show=showMenu>
-      <span id="user-name"></span><br>
-      <span id="user-email"></span><hr>
+      <span id="user-name">{{ userInfo.firstname | capitalize}} {{ userInfo.lastname | capitalize}}</span><br>
+      <span id="user-email"></span>{{ userInfo.email }}<hr>
       <router-link to="/browse">Browse</router-link><hr>
       <router-link to="/login">Log Out</router-link>
     </div>
@@ -15,7 +15,7 @@
         <input type="text" name="search"><button type="button">Search</button>
       </div>
       <div class="avatar-container">
-        <img src="../assets/avatar.png" class="avatar" alt="Me" id="user-avatar" @click=toggleMenu>
+        <img :src=this.userInfo.avatar class="avatar" alt="Me" id="user-avatar" @click=toggleMenu>
       </div>
     </nav>
   </header>
@@ -37,6 +37,20 @@ export default {
       },
       navHome: function() {
         this.$router.push('/');
+      }
+    },
+    computed: {
+      userInfo: function() {
+        return this.$store.getters.getUserInfo;
+      }
+    },
+    mounted() {
+        this.$store.dispatch("getUserInfo");
+    },
+    filters: {
+      capitalize: function(name) {
+        if (!name) return ''
+        return name.toString().charAt(0).toUpperCase() + name.toString().slice(1)
       }
     }
   }

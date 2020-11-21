@@ -1,14 +1,23 @@
 <template>
   <div>
-      <div v-for="(profile, index) in profiles" :key="index">
-          {{ profile }}
-      </div>
+    <div class="profile" v-for="(profile, index) in profiles" :key="index">
+        <div class="profile-picture-div">
+            <img class="profile-picture" :src=profile.avatar>
+        </div>
+        <div class="profile-name-div">
+            <h3 class="profile-name">{{profile.firstname | capitalize}} {{profile.lastname | capitalize}}</h3>
+        </div>
+        <div class="follow-button-div">
+            <button :class="{ 'followed-button': profile.following, 'follow-button': true }"
+                    @click="toggleFollow(profile)">{{ profile.following ? "Followed" : "Follow" }}</button>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-    name: "Profile",
+    name: "Profiles",
     computed: {
         profiles: function () {
             return this.$store.state.profiles
@@ -16,6 +25,17 @@ export default {
     },
     mounted() {
         this.$store.dispatch("getProfiles");
+    },
+    methods: {
+      toggleFollow: function(profile) {
+          profile.following = !profile.following;
+      }
+    },
+    filters: {
+      capitalize: function(name) {
+        if (!name) return ''
+        return name.toString().charAt(0).toUpperCase() + name.toString().slice(1)
+      }
     }
 }
 </script>

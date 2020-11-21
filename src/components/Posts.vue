@@ -1,27 +1,52 @@
 <template>
-  <div>
-      <div v-for="(post, index) in posts" :key="index">
-          {{ post }}
+<div>
+    <div class="post" v-for="(post, index) in posts" :key="index">
+      <div class="post-author">
+          <span class="post-author-info">
+              <img :src=post.author.avatar alt="Post author">
+              <small>{{post.author.firstname | capitalize}} {{post.author.lastname | capitalize}}</small>
+          </span>
+          <small>{{post.createTime}}</small>
       </div>
-      <div v-for="(author, index) in authors" :key="index">
-          {{ author }}
+      <div v-if=post.media>
+        <div class="post-image" v-if="post.media.type === 'video'">
+          <video :src=post.media.url controls></video>
+        </div>
+        <div class="post-image" v-else>
+          <img :src=post.media.url alt="">
+        </div>
+      </div>
+      <div class="post-title" v-if=post.text><h3>{{post.text}}</h3></div>
+      <div class="post-actions">
+          <button @click="togglePostLike(post)" 
+                  type="button" name="like"
+                  :class="{ liked: post.liked, 'like-button': true }">{{post.likes}}</button>
       </div>
   </div>
+</div>
 </template>
 
 <script>
 export default {
-    name: "Post",
+    name: "Posts",
     computed: {
         posts: function () {
-            return this.$store.state.posts
-        },
-        authors: function () {
-            return this.$store.state.authors
+            return this.$store.getters.getPosts;
         }
     },
     mounted() {
         this.$store.dispatch("getPosts");
+    },
+    methods: {
+      togglePostLike: function(post) {
+          post.liked = !post.liked;
+      }
+    },
+    filters: {
+      capitalize: function(name) {
+        if (!name) return ''
+        return name.toString().charAt(0).toUpperCase() + name.toString().slice(1)
+      }
     }
 }
 </script>
@@ -62,7 +87,7 @@ export default {
 .post .post-author .post-author-info small {
   position: absolute;
   top: 10px;
-  left: 35px;
+  left: 40px;
 }
 
 .post .post-author .post-author-info + small {
@@ -96,9 +121,7 @@ export default {
 }
 
 .like-button {
-  /*background-image: url(../images/like.png);
-
-   */
+  background-image: url(../assets/like.png);
   background-size: 15px;
   background-repeat: no-repeat;
   background-position: 5px center;

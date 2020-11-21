@@ -2,19 +2,19 @@
   <div>
     <Header/>
     <section class="main-container" id="posts-container">
-        <Post/>
+        <Posts />
     </section>
   </div>
 </template>
 
 <script>
 import Header from "./Header.vue";
-import Post from "./Post.vue";
+import Posts from "./Posts.vue";
 
 export default {
   name: "Home",
   components: {
-    Header, Post
+    Header, Posts
   }
 }
 </script>

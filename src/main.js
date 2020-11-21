@@ -10,9 +10,6 @@ import Login from './components/Login.vue'
 Vue.config.productionTip = false
 Vue.use(VueRouter);
 Vue.use(Vuex);
-// TODO use axios
-
-// TODO change <title> of pages?
 
 const routes = [
     {path: '/', component: Home, name: 'homePage'},
@@ -24,10 +21,15 @@ const router = new VueRouter({routes});
 
 const store = new Vuex.Store({
     state: {
-        showMenu: false,
         posts: [],
         profiles: [],
         authors: [],
+        user: {
+          firstname: "",
+          lastname: "",
+          email: "",
+          avatar: ""
+        }
     },
     actions: {
         getPosts({ commit }) {
@@ -41,35 +43,51 @@ const store = new Vuex.Store({
                 .then(response => {
                     commit('setProfiles', response.data);
                 });
+        },
+        getUserInfo({ commit }) {
+            axios.get('https://private-anon-2946c586f1-wad20postit.apiary-mock.com/users/1')
+                .then(response => {
+                    commit('setUser', response.data);
+                });
         }
     },
     mutations: {
-        toggleMenu: (state) => {
-            state.showMenu = !state.showMenu;
-        },
-        hideMenu: (state) => {
-            state.showMenu = false;
-        },
-        showMenu: (state) => {
-            state.showMenu = true;
-        },
         setPostsAndAuthors: (state, posts) => {
+            for (let post of posts) {
+              post.liked = false;
+            }
             state.posts = posts;
-            let jsonPosts = JSON.parse(posts);
             let authors = [];
-            for (const post in jsonPosts) {
+            for (const post of posts) {
                 authors.push(post.author);
-                console.log(post.author);
             }
             state.authors = authors;
         },
         setProfiles: (state, profiles) => {
+            for (let profile of profiles) {
+              profile.following = false;
+            }
             state.profiles = profiles;
+        },
+        setUser: (state, user) => {
+          state.user.firstname = user.firstname;
+          state.user.lastname = user.lastname;
+          state.user.email = user.email;
+          state.user.avatar = user.avatar;
         }
     },
     getters: {
-        menuVisibilityState: (state) => {
-            return state.showMenu;
+        getUserInfo: (state) => {
+          return state.user;
+        },
+        getPosts: (state) => {
+          return state.posts;
+        },
+        getProfiles: (state) => {
+          return state.profiles;
+        },
+        getAuthors: (state) => {
+          return state.authors;
         }
     }
 });
